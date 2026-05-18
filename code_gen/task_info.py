@@ -1452,9 +1452,13 @@ PICK_DUAL_BOTTLES_CUSTOM = {
                         with the bottle1 on the left and the bottle2 on the right.\
                         Note: You don't need to open gripper and don't put down the bottles at the end.",
     "current_code": """
-                class gpt_pick_dual_bottles_custom(pick_dual_bottles_custom):
-                    def play_once(self):
-                        pass
+from envs.pick_dual_bottles_custom import pick_dual_bottles_custom
+class gpt_pick_dual_bottles_custom(pick_dual_bottles_custom):
+    def play_once(self):
+        # TODO: Implement robot control logic here
+
+        self.info["info"] = {"{A}": f"001_bottle/base13", "{B}": f"001_bottle/base16"}
+        return self.info
                 """,
     "actor_list": {
         "self.bottle1": {

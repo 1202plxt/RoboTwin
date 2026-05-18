@@ -48,7 +48,46 @@ class pick_dual_bottles_custom(Base_Task):
         self.right_target_pose = [0.06, -0.105, 1, 0, 1, 0, 0]
 
     def play_once(self):
-        pass
+        # Determine which arm to use for each bottle based on their x-coordinate position
+        bottle1_arm_tag = ArmTag("left")
+        bottle2_arm_tag = ArmTag("right")
+
+        # Simultaneously grasp both bottles with their respective arms
+        self.move(
+            self.grasp_actor(self.bottle1, arm_tag=bottle1_arm_tag, pre_grasp_dis=0.08),
+            self.grasp_actor(self.bottle2, arm_tag=bottle2_arm_tag, pre_grasp_dis=0.08),
+        )
+
+        # Simultaneously lift both bottles up by 0.1 meters
+        self.move(
+            self.move_by_displacement(arm_tag=bottle1_arm_tag, z=0.1),
+            self.move_by_displacement(arm_tag=bottle2_arm_tag, z=0.1),
+        )
+
+        # Simultaneously place both bottles at their target positions
+        self.move(
+            self.place_actor(
+                self.bottle1,
+                target_pose=self.left_target_pose,
+                arm_tag=bottle1_arm_tag,
+                functional_point_id=0,
+                pre_dis=0.0,
+                dis=0.0,
+                is_open=False,
+            ),
+            self.place_actor(
+                self.bottle2,
+                target_pose=self.right_target_pose,
+                arm_tag=bottle2_arm_tag,
+                functional_point_id=0,
+                pre_dis=0.0,
+                dis=0.0,
+                is_open=False,
+            ),
+        )
+
+        self.info["info"] = {"{A}": f"001_bottle/base13", "{B}": f"001_bottle/base16"}
+        return self.info
 
     def check_success(self):
         bottle1_target = self.left_target_pose[:2]
