@@ -1422,6 +1422,29 @@ TURN_SWITCH = {
 
 
 
+PLACE_APPLE_PLATE = {
+    "task_name": "place_apple_plate",
+    "task_description": "Use the proper arm to pick the apple and put it into the plate.\
+                        Grasp the apple with the specified arm. Place the apple onto the plate.",
+    "current_code": """
+                class gpt_place_apple_plate(place_apple_plate):
+                    def play_once(self):
+                        pass
+                """,
+    "actor_list": {
+        "self.apple": {
+            "name": "apple",
+            "description": "The apple that needs to be placed on the plate.",
+            "modelname": "035_Apple",
+        },
+        "self.plate": {
+            "name": "plate",
+            "description": "The plate where the apple needs to be placed.",
+            "modelname": "003_Plate",
+        }
+    }
+}
+
 def get_all_tasks():
     return {
         key: value
