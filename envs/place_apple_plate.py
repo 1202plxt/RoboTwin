@@ -48,6 +48,17 @@ class place_apple_plate(Base_Task):
             model_id=self.apple_id,
         )
 
+        # Fallback to inject contact points manually in case model_data json lacks it
+        if "contact_points_pose" not in self.apple.config:
+            self.apple.config["contact_points_pose"] = [
+                [
+                    [0.0, 1.0, 0.0, 0.0],
+                    [1.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, -1.0, 0.03], # Top-down grasp slightly above center
+                    [0.0, 0.0, 0.0, 1.0],
+                ]
+            ]
+
         self.add_prohibit_area(self.apple, padding=0.1)
         self.add_prohibit_area(self.plate, padding=0.1)
 
