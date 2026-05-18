@@ -16,10 +16,11 @@ import inspect
 
 current_file_path = os.path.abspath(__file__)
 parent_directory = os.path.dirname(current_file_path)
+project_root = os.path.dirname(parent_directory)
 
-SCRIPT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "script")
-CONFIGS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "task_config")
-OBJECTS_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets/objects")
+SCRIPT_PATH = os.path.join(project_root, "script")
+CONFIGS_PATH = os.path.join(project_root, "task_config")
+OBJECTS_PATH = os.path.join(project_root, "assets/objects")
 
 
 def enrich_actors(actor_list):
