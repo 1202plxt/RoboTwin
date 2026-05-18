@@ -26,7 +26,7 @@ class place_apple_plate(Base_Task):
             pose=plate_pose,
             modelname="003_plate",
             convex=True,
-            model_id=self.plate_id,
+            model_id=0, # only model_data0.json is present
             is_static=True, # Make it static so it doesn't move when pushed
         )
 
@@ -39,7 +39,7 @@ class place_apple_plate(Base_Task):
             rotate_lim=[0, 3.14, 0],
             qpos=[1, 0, 0, 0],
         )
-        self.apple_id = np.random.choice([i for i in range(10)])
+        self.apple_id = np.random.choice([0, 1]) # model_data0.json and model_data1.json are present
         self.apple = create_actor(
             scene=self,
             pose=apple_pose,

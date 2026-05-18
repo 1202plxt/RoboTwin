@@ -1435,12 +1435,12 @@ PLACE_APPLE_PLATE = {
         "self.apple": {
             "name": "apple",
             "description": "The apple that needs to be placed on the plate.",
-            "modelname": "035_Apple",
+            "modelname": "035_apple",
         },
         "self.plate": {
             "name": "plate",
             "description": "The plate where the apple needs to be placed.",
-            "modelname": "003_Plate",
+            "modelname": "003_plate",
         }
     }
 }
