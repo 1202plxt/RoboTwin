@@ -1445,6 +1445,41 @@ PLACE_APPLE_PLATE = {
     }
 }
 
+PICK_DUAL_BOTTLES_CUSTOM = {
+    "task_name": "pick_dual_bottles_custom",
+    "task_description":
+    "Use both arms to simultaneously pick up the bottle1 and bottle2 and move them to the front target locations, \
+                        with the bottle1 on the left and the bottle2 on the right.\
+                        Note: You don't need to open gripper and don't put down the bottles at the end.",
+    "current_code": """
+                class gpt_pick_dual_bottles_custom(pick_dual_bottles_custom):
+                    def play_once(self):
+                        pass
+                """,
+    "actor_list": {
+        "self.bottle1": {
+            "name": "bottle1",
+            "description": "The first bottle to be picked up, placed on the left side.",
+            "modelname": "001_bottle",
+        },
+        "self.bottle2": {
+            "name": "bottle2",
+            "description": "The second bottle to be picked up, placed on the right side.",
+            "modelname": "001_bottle",
+        },
+        "self.left_target_pose": {
+            "name": "left_target_pose",
+            "description": "The target pose for the left arm to place bottle1.",
+            "modelname": None,
+        },
+        "self.right_target_pose": {
+            "name": "right_target_pose",
+            "description": "The target pose for the right arm to place bottle2.",
+            "modelname": None,
+        }
+    },
+}
+
 def get_all_tasks():
     return {
         key: value
