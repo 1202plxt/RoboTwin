@@ -136,7 +136,7 @@ def annotate_first_frame(hdf5_path, output_dir=None, camera_name='head_camera'):
         # 获取相机参数（首帧）
         try:
             intrinsic_data = f['observation'][camera_name]['intrinsic_cv']
-            cam2world_data = f['observation'][camera_name]['extrinsic_cv']
+            cam2world_data = f['observation'][camera_name]['cam2world_gl']
             
             print(f"  intrinsic shape: {intrinsic_data.shape}")
             print(f"  cam2world shape: {cam2world_data.shape}")
