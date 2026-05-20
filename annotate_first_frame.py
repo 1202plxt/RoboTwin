@@ -9,7 +9,29 @@ import cv2
 import os
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.colors import TABLEAU_COLORS
+
+def get_colors(n):
+    """生成n种不同的颜色"""
+    # 使用一些鲜明的颜色
+    base_colors = [
+        (255, 0, 0),      # 红色
+        (0, 255, 0),      # 绿色
+        (0, 0, 255),      # 蓝色
+        (255, 255, 0),    # 黄色
+        (255, 0, 255),    # 洋红
+        (0, 255, 255),    # 青色
+        (255, 128, 0),    # 橙色
+        (128, 0, 255),    # 紫色
+        (0, 255, 128),    # 青绿色
+        (255, 128, 128),  # 浅红
+        (128, 255, 128),  # 浅绿
+        (128, 128, 255),  # 浅蓝
+    ]
+    # 扩展颜色列表
+    colors = []
+    for i in range(n):
+        colors.append(base_colors[i % len(base_colors)])
+    return colors
 
 def project_point_to_image(point_3d, intrinsic, extrinsic):
     """
@@ -73,16 +95,6 @@ def draw_annotation(image, u, v, label, color):
     
     return image
 
-def get_colors(n):
-    """生成n种不同的颜色"""
-    colors = list(TABLEAU_COLORS.values())
-    # 扩展颜色列表
-    while len(colors) < n:
-        colors.extend(colors)
-    # 转换为BGR格式并归一化到0-255
-    colors = [(int(c[0] * 255), int(c[1] * 255), int(c[2] * 255)) for c in colors]
-    return colors[:n]
-
 def decode_jpeg(jpeg_bytes):
     """解码JPEG数据"""
     nparr = np.frombuffer(jpeg_bytes, np.uint8)
@@ -124,10 +136,13 @@ def annotate_first_frame(hdf5_path, output_dir=None, camera_name='head_camera'):
         # 获取相机参数（首帧）
         try:
             intrinsic = f['observation'][camera_name]['intrinsic_cv'][0]
-            extrinsic = f['observation'][camera_name]['extrinsic_cv'][0]
+            cam2world = f['observation'][camera_name]['extrinsic_cv'][0]
+            # 将 cam2world 转换为 world2cam（取逆）
+            extrinsic = np.linalg.inv(cam2world)
             print(f"✅ 读取相机内参和外参")
             print(f"   内参:\n{intrinsic}")
-            print(f"   外参:\n{extrinsic}")
+            print(f"   cam2world:\n{cam2world}")
+            print(f"   world2cam:\n{extrinsic}")
         except Exception as e:
             print(f"❌ 读取相机参数失败: {e}")
             return None
@@ -226,7 +241,7 @@ def annotate_first_frame(hdf5_path, output_dir=None, camera_name='head_camera'):
         # 添加图例
         legend_elements = []
         for info in object_info:
-            # 将颜色转换为RGB归一化
+            # 将BGR (0-255) 转换为RGB归一化 (0-1)
             color_rgb = (info['color'][2]/255, info['color'][1]/255, info['color'][0]/255)
             legend_elements.append(patches.Patch(
                 facecolor=color_rgb, 
