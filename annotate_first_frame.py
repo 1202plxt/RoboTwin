@@ -135,8 +135,27 @@ def annotate_first_frame(hdf5_path, output_dir=None, camera_name='head_camera'):
         
         # 获取相机参数（首帧）
         try:
-            intrinsic = f['observation'][camera_name]['intrinsic_cv'][0]
-            cam2world = f['observation'][camera_name]['extrinsic_cv'][0]
+            intrinsic_data = f['observation'][camera_name]['intrinsic_cv']
+            cam2world_data = f['observation'][camera_name]['extrinsic_cv']
+            
+            print(f"  intrinsic shape: {intrinsic_data.shape}")
+            print(f"  cam2world shape: {cam2world_data.shape}")
+            
+            # 获取首帧数据
+            if len(intrinsic_data.shape) == 3:
+                intrinsic = intrinsic_data[0]
+            else:
+                intrinsic = intrinsic_data[:]
+                
+            if len(cam2world_data.shape) == 3:
+                cam2world = cam2world_data[0]
+            else:
+                cam2world = cam2world_data[:]
+            
+            # 确保矩阵是正确的形状
+            intrinsic = intrinsic.reshape(3, 3)
+            cam2world = cam2world.reshape(4, 4)
+            
             # 将 cam2world 转换为 world2cam（取逆）
             extrinsic = np.linalg.inv(cam2world)
             print(f"✅ 读取相机内参和外参")
@@ -145,6 +164,8 @@ def annotate_first_frame(hdf5_path, output_dir=None, camera_name='head_camera'):
             print(f"   world2cam:\n{extrinsic}")
         except Exception as e:
             print(f"❌ 读取相机参数失败: {e}")
+            import traceback
+            traceback.print_exc()
             return None
         
         # 获取首帧图像
