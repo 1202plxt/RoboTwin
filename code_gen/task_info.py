@@ -1422,6 +1422,68 @@ TURN_SWITCH = {
 
 
 
+PLACE_APPLE_PLATE = {
+    "task_name": "place_apple_plate",
+    "task_description": "Use the proper arm to pick the apple and put it into the plate.\
+                        Grasp the apple with the specified arm. Place the apple onto the plate.",
+    "current_code": """
+                class gpt_place_apple_plate(place_apple_plate):
+                    def play_once(self):
+                        pass
+                """,
+    "actor_list": {
+        "self.apple": {
+            "name": "apple",
+            "description": "The apple that needs to be placed on the plate.",
+            "modelname": "035_apple",
+        },
+        "self.plate": {
+            "name": "plate",
+            "description": "The plate where the apple needs to be placed.",
+            "modelname": "003_plate",
+        }
+    }
+}
+
+PICK_DUAL_BOTTLES_CUSTOM = {
+    "task_name": "pick_dual_bottles_custom",
+    "task_description":
+    "Use both arms to simultaneously pick up the bottle1 and bottle2 and move them to the front target locations, \
+                        with the bottle1 on the left and the bottle2 on the right.\
+                        Note: You don't need to open gripper and don't put down the bottles at the end.",
+    "current_code": """
+from envs.pick_dual_bottles_custom import pick_dual_bottles_custom
+class gpt_pick_dual_bottles_custom(pick_dual_bottles_custom):
+    def play_once(self):
+        # TODO: Implement robot control logic here
+
+        self.info["info"] = {"{A}": f"001_bottle/base13", "{B}": f"001_bottle/base16"}
+        return self.info
+                """,
+    "actor_list": {
+        "self.bottle1": {
+            "name": "bottle1",
+            "description": "The first bottle to be picked up, placed on the left side.",
+            "modelname": "001_bottle",
+        },
+        "self.bottle2": {
+            "name": "bottle2",
+            "description": "The second bottle to be picked up, placed on the right side.",
+            "modelname": "001_bottle",
+        },
+        "self.left_target_pose": {
+            "name": "left_target_pose",
+            "description": "The target pose for the left arm to place bottle1.",
+            "modelname": None,
+        },
+        "self.right_target_pose": {
+            "name": "right_target_pose",
+            "description": "The target pose for the right arm to place bottle2.",
+            "modelname": None,
+        }
+    },
+}
+
 def get_all_tasks():
     return {
         key: value

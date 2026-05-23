@@ -29,6 +29,7 @@ def generate(message, gpt="deepseek", temperature=0):
         messages=message,
         stream=False,
         temperature=temperature,
+        max_tokens=4096,
     )
     print('end generating')
 
